@@ -12,7 +12,7 @@
   {
     "title": "DagNabit V2",
     "description": "JavaScript gameplay engine and interactive systems.",
-    "path": "Dagnabit_V2/"
+    "path": "DagNabIt_V2/"
   },
   {
     "title": "Woodpecker Chess",
@@ -22,7 +22,7 @@
   {
     "title": "Doomsday Trainer",
     "description": "A web app for practicing Conway's Doomsday algorithm for mental math.",
-    "path": "Doomsday-trainer/"
+    "path": "doomsday-trainer/"
   },
   {
     "title": "Survival Skill Builder",
