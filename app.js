@@ -1,3 +1,6 @@
+// Dynamically detects "https://saixua.github.io" (or localhost when working offline)
+const BASE_URL = window.location.origin;
+
 // Fetch the repository project nodes from our json configuration file
 fetch('./projects.json')
     .then(response => {
@@ -8,14 +11,14 @@ fetch('./projects.json')
     })
     .then(projects => {
         const gridElement = document.getElementById('project-grid');
-        
-        // Clear out any placeholder nodes
         gridElement.innerHTML = '';
 
-        // Dynamically build and map out the portfolio structure
+        // Dynamically build and map out the portfolio structure using our base variable
         projects.forEach(project => {
             const card = document.createElement('a');
-            card.href = project.url;
+            
+            // Constructs the full URL dynamically based on where the site is currently hosted
+            card.href = `${BASE_URL}/${project.path}`;
             card.className = 'card';
 
             card.innerHTML = `

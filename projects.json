@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Isla Terminal",
+    "description": "Secure transceiver firmware interface. Decoder module v1.5.",
+    "path": "isla-terminal/"
+  },
+  {
+    "title": "Video Poker Trainer",
+    "description": "Tactical card simulation engine and state training system.",
+    "path": "video-poker-trainer/"
+  },
+  {
+    "title": "DagNabit V2",
+    "description": "JavaScript gameplay engine and interactive systems.",
+    "path": "Dagnabit_V2/"
+  },
+  {
+    "title": "Woodpecker Chess",
+    "description": "Tactics and spaced-repetition chess training module.",
+    "path": "woodpecker-chess/"
+  },
+  {
+    "title": "Doomsday Trainer",
+    "description": "A web app for practicing Conway's Doomsday algorithm for mental math.",
+    "path": "Doomsday-trainer/"
+  },
+  {
+    "title": "Survival Skill Builder",
+    "description": "Interactive procedural skill builder environment.",
+    "path": "survival-skill-builder/"
+  }
+]
