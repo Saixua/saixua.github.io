@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🎛️ LocalStorage Master Commander & Editor</title>
+    <style>
+        body { background: #111; color: #eee; font-family: monospace; padding: 20px; font-size: 13px; }
+        h1 { color: #55ff55; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 5px; }
+        .subtitle { color: #888; margin-bottom: 25px; }
+        .project-section { background: #1a1a1a; border: 1px solid #333; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
+        .project-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; padding-bottom: 8px; margin-bottom: 12px; }
+        .project-title { font-size: 16px; font-weight: bold; color: #fff; }
+        .project-desc { font-size: 12px; color: #aaa; margin-top: 2px; }
+        
+        /* Table Layout for Keys */
+        .storage-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .storage-table th { text-align: left; padding: 8px; background: #222; color: #55ff55; font-size: 11px; text-transform: uppercase; }
+        .storage-table td { padding: 8px; border-bottom: 1px solid #2a2a2a; vertical-align: top; }
+        .key-name { color: #ffb366; font-weight: bold; word-break: break-all; width: 25%; }
+        
+        /* Form Inputs */
+        .value-textarea { width: 100%; background: #000; color: #55ff55; border: 1px solid #444; padding: 6px; font-family: monospace; font-size: 12px; border-radius: 4px; resize: vertical; box-sizing: border-box; }
+        .value-textarea:focus { border-color: #55ff55; outline: none; }
+        
+        /* Action Buttons */
+        button { font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; padding: 6px 12px; }
+        .btn-purge { background: #aa2222; color: white; }
+        .btn-purge:hover { background: #ff3333; }
+        .btn-save { background: #228b22; color: white; margin-right: 5px; }
+        .btn-save:hover { background: #32cd32; }
+        .btn-delete { background: #444; color: #ff5555; border: 1px solid #ff5555; padding: 5px 10px; }
+        .btn-delete:hover { background: #ff5555; color: black; }
+        
+        .no-data { color: #666; font-style: italic; padding: 10px 8px; }
+        .status-banner { position: fixed; bottom: 20px; right: 20px; background: #222; border: 1px solid #55ff55; color: #55ff55; padding: 12px 24px; border-radius: 4px; display: none; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+    <h1>🎛️ Cross-Project Cache Commander & Editor</h1>
+    <div class="subtitle">Live-inspecting local domain storage vectors. Run this in your application environment.</div>
+
+    <div id="app-container"></div>
+    <div id="status-banner" class="status-banner"></div>
+
+    <script>
+        // Your complete project fingerprint matrix
+        const config = {
+          "projects": [
+            { "id": "Isla Terminal", "strategy": "startsWith", "targets": ["isla_terminal"], "desc": "Wipes core language, game modes, and dynamic language progress vectors." },
+            { "id": "Video Poker Trainer", "strategy": "exactMatch", "targets": ["pokerTrainerBankroll"], "desc": "Resets or overrides the trainer bankroll balance engine." },
+            { "id": "DagNabIt V2", "strategy": "startsWith", "targets": ["dagnabit_"], "desc": "Manages Chief/Thief scores, win streaks, track indices, and audio parameters." },
+            { "id": "Woodpecker Chess", "strategy": "mixedMatch", "targets": ["woodpecker", "dynamicLength"], "desc": "Controls active cycles, tracking history, core programs, profiles, and custom bounds." }
+          ]
+        };
+
+        // Flash message utility
+        function showStatus(msg) {
+            const banner = document.getElementById('status-banner');
+            banner.innerText = msg;
+            banner.style.display = 'block';
+            setTimeout(() => { banner.style.display = 'none'; }, 3000);
+        }
+
+        // Rule evaluation logic
+        function isKeyMatch(key, project) {
+            if (project.strategy === "startsWith") return project.targets.some(t => key.startsWith(t));
+            if (project.strategy === "exactMatch") return project.targets.includes(key);
+            if (project.strategy === "mixedMatch") return project.targets.some(t => key.startsWith(t) || key === t);
+            return false;
+        }
+
+        // Scans localStorage and builds the interactive UI grid
+        function renderInterface() {
+            const container = document.getElementById('app-container');
+            const allStorageKeys = Object.keys(localStorage);
+
+            container.innerHTML = config.projects.map(project => {
+                // Find keys matching this specific project definition
+                const matchingKeys = allStorageKeys.filter(key => isKeyMatch(key, project)).sort();
+
+                // Generate table rows dynamically for active keys
+                let tableRows = '';
+                if (matchingKeys.length === 0) {
+                    tableRows = `<tr><td colspan="3" class="no-data">No active storage footprints found for this project in this domain context.</td></tr>`;
+                } else {
+                    tableRows = matchingKeys.map(key => {
+                        const rawValue = localStorage.getItem(key) || '';
+                        // Determine layout rows based on content length
+                        const rowsCount = rawValue.length > 60 ? 4 : 1;
+                        
+                        return `
+                            <tr>
+                                <td class="key-name">${key}</td>
+                                <td>
+                                    <textarea id="input-${btoa(key)}" class="value-textarea" rows="${rowsCount}">${rawValue}</textarea>
+                                </td>
+                                <td style="width: 150px; text-align: right;">
+                                    <button class="btn-save" onclick="saveKeyValue('${key}')">SAVE</button>
+                                    <button class="btn-delete" onclick="deleteIndividualKey('${key}')">✕</button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                return `
+                    <div class="project-section">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">${project.id}</div>
+                                <div class="project-desc">${project.desc}</div>
+                            </div>
+                            <button class="btn-purge" onclick="purgeEntireProject('${project.id}')">PURGE ALL</button>
+                        </div>
+                        <table class="storage-table">
+                            <thead>
+                                <tr>
+                                    <th>Data Key Reference</th>
+                                    <th>Value Data String / JSON payload</th>
+                                    <th style="text-align: right;">State Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Action: Modifies/Saves data inside a target key
+        function saveKeyValue(key) {
+            const targetId = `input-${btoa(key)}`;
+            const newValue = document.getElementById(targetId).value;
+            
+            localStorage.setItem(key, newValue);
+            showStatus(`[UPDATED] Key values committed for: ${key}`);
+            renderInterface();
+        }
+
+        // Action: Wipes a single target key
+        function deleteIndividualKey(key) {
+            localStorage.removeItem(key);
+            showStatus(`[DELETED] Erased individual key: ${key}`);
+            renderInterface();
+        }
+
+        // Action: Wipes all tracking metrics assigned to a single project layout
+        function purgeEntireProject(projectName) {
+            const project = config.projects.find(p => p.id === projectName);
+            if (!project) return;
+
+            let count = 0;
+            Object.keys(localStorage).forEach(key => {
+                if (isKeyMatch(key, project)) {
+                    localStorage.removeItem(key);
+                    count++;
+                }
+            });
+
+            showStatus(`[PURGED] Dropped ${count} global fields mapped to ${projectName}.`);
+            renderInterface();
+        }
+
+        // Initial launch sequence
+        renderInterface();
+    </script>
+</body>
+</html>

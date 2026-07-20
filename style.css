@@ -53,3 +53,10 @@ h1 {
     color: #9ca3af;
     line-height: 1.4;
 }
+
+.sys-utility-bar a:hover {
+    background: #ff5555 !important;
+    color: #000000 !important;
+    box-shadow: 0 0 10px rgba(255, 85, 85, 0.5);
+    cursor: pointer;
+}
